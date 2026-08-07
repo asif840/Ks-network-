@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>KS Network Limited</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root{
+    --ink:#101820;
+    --paper:#f2f5f2;
+    --line:#0f3d3e;
+    --line-bright:#1a7a6e;
+    --amber:#e08b1f;
+    --blue:#2b6fc9;
+    --danger:#e0453f;
+    --purple:#7b4fd3;
+    --card:#ffffff;
+    --muted:#5b6a68;
+    --border:#dbe3de;
+    --grad-brand: linear-gradient(135deg,#0f3d3e 0%, #1a7a6e 55%, #17a690 100%);
+    --grad-new: linear-gradient(135deg,#1a7a6e,#17a690);
+    --grad-off: linear-gradient(135deg,#c0392f,#e0453f);
+    --grad-house: linear-gradient(135deg,#c9781a,#e08b1f);
+    --grad-onu: linear-gradient(135deg,#204d8f,#2b6fc9);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Hind Siliguri',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:74px;
+  }
+  input,select,textarea,button{font-family:'Hind Siliguri',sans-serif;}
+
+  /* ---------- LOGIN ---------- */
+  #loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--grad-brand);
+    padding:20px;
+  }
+  .login-card{
+    background:var(--card);
+    border-radius:16px;
+    padding:36px 26px;
+    width:100%;
+    max-width:360px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  }
+  .login-card .logo-mark{
+    width:56px;height:56px;
+    border-radius:14px;
+    background:var(--grad-new);
+    margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;color:#fff;font-weight:700;
+    box-shadow:0 6px 16px rgba(26,122,110,0.35);
+  }
+  .login-card h1{
+    font-size:19px;margin:0 0 2px;
+  }
+  .login-card .tagline{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;color:var(--muted);margin-bottom:24px;
+  }
+  .login-card input{
+    width:100%;
+    padding:13px 14px;
+    border:1.5px solid var(--border);
+    border-radius:9px;
+    font-size:15px;
+    margin-bottom:12px;
+  }
+  .login-card input:focus{outline:none;border-color:var(--line-bright);}
+  .login-card button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:9px;
+    background:var(--grad-brand);
+    color:#fff;
+    font-size:15.5px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .login-note{
+    font-size:11.5px;color:var(--muted);margin-top:16px;line-height:1.6;
+  }
+
+  /* ---------- APP SHELL ---------- */
+  .topbar{
+    background:var(--grad-brand);color:#fff;
+    padding:16px 18px 14px;
+    position:sticky;top:0;z-index:20;
+    border-bottom:3px solid #0d2e2f;
+  }
+  .topbar .brand{display:flex;align-items:center;gap:10px;}
+  .topbar .brand .mark{
+    width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,0.18);
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;
+    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,0.35);
+  }
+  .topbar h1{margin:0;font-size:17px;font-weight:700;}
+  .topbar .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:#d9f0ec;margin-top:3px;}
+
+  .wrap{max-width:860px;margin:0 auto;padding:16px;}
+  .tabcontent{display:none;}
+  .tabcontent.active{display:block;}
+
+  /* bottom nav */
+  .bottomnav{
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--ink);
+    display:flex;
+    z-index:30;
+    border-top:1px solid #22303a;
+  }
+  .bottomnav button{
+    flex:1;background:none;border:none;color:#9fb0ad;
+    padding:10px 4px 9px;font-size:11px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+  }
+  .bottomnav button .ic{font-size:19px;}
+  .bottomnav button.active{color:#fff;}
+  .bottomnav button.active .ic{color:var(--line-bright);}
+
+  /* stat cards */
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+  .stat-card{
+    background:var(--card);border-radius:14px;padding:14px 14px 12px;
+    position:relative;overflow:hidden;
+    box-shadow:0 2px 8px rgba(16,24,32,0.08);
+  }
+  .stat-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:5px;
+    background:var(--grad-new);
+  }
+  .stat-card.off::before{background:var(--grad-off);}
+  .stat-card.house::before{background:var(--grad-house);}
+  .stat-card.onu::before{background:var(--grad-onu);}
+  .stat-card .ic-badge{
+    width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+    font-size:15px;margin-bottom:8px;background:var(--grad-new);color:#fff;
+  }
+  .stat-card.off .ic-badge{background:var(--grad-off);}
+  .stat-card.house .ic-badge{background:var(--grad-house);}
+  .stat-card.onu .ic-badge{background:var(--grad-onu);}
+  .stat-card .num{font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .stat-card .lbl{font-size:12.5px;color:var(--muted);margin-top:2px;}
+
+  .month-select-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .month-select-row select{
+    flex:1;padding:11px 12px;border:1.5px solid var(--border);border-radius:9px;
+    font-size:14.5px;background:#fff;
+  }
+  .section-label{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.4px;margin:22px 0 8px;
+  }
+
+  table.breakdown{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;}
+  table.breakdown th, table.breakdown td{
+    padding:9px 10px;font-size:13px;text-align:left;border-bottom:1px solid var(--border);
+  }
+  table.breakdown th{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);
+    text-transform:uppercase;background:#f4f6f4;
+  }
+  table.breakdown td.num{font-family:'JetBrains Mono',monospace;text-align:center;}
+  table.breakdown tr:last-child td{border-bottom:none;}
+
+  /* branch tab */
+  .branch-add-row{display:flex;gap:8px;margin-bottom:14px;}
+  .branch-add-row input{
+    flex:1;padding:12px 14px;border:1.5px solid var(--ink);border-radius:9px;font-size:15px;
+  }
+  .branch-add-row button{
+    background:var(--grad-new);color:#fff;border:none;border-radius:9px;padding:0 18px;font-weight:700;cursor:pointer;
+  }
+  .branch-card{
+    background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(16,24,32,0.04);
+  }
+  .branch-card-head{
+    padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;
+  }
+  .branch-card-head .bname{font-weight:700;font-size:15px;}
+  .branch-card-head .bcount{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:2px;
+  }
+  .branch-card-body{display:none;padding:0 15px 15px;border-top:1px dashed var(--border);}
+  .branch-card-body.open{display:block;}
+  .branch-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:12px 0;}
+  .branch-stat-mini{
+    text-align:center;background:var(--paper);border-radius:9px;padding:8px 4px;
+  }
+  .branch-stat-mini .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;}
+  .branch-stat-mini .l{font-size:10px;color:var(--muted);margin-top:2px;}
+  .thana-edit-row{margin:12px 0;}
+  .thana-edit-row label{display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);margin-bottom:5px;}
+  .thana-edit-inline{display:flex;gap:8px;}
+  .thana-edit-inline input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13.5px;}
+  .thana-edit-inline button{background:var(--grad-new);color:#fff;border:none;border-radius:8px;padding:0 16px;font-weight:600;font-size:12.5px;cursor:pointer;}
+  .branch-actions{display:flex;gap:8px;}
+  .branch-actions button{
+    flex:1;padding:9px;border-radius:8px;border:1px solid var(--ink);background:transparent;font-size:12.5px;font-weight:600;cursor:pointer;
+  }
+  .branch-actions .del{border-color:var(--danger);color:var(--danger);}
+
+  /* add tab */
+  .add-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+  .add-tile{
+    border-radius:16px;overflow:hidden;color:#fff;
+    box-shadow:0 4px 14px rgba(16,24,32,0.15);
+  }
+  .add-tile .tile-main{
+    padding:22px 12px 16px;text-align:center;cursor:pointer;
+  }
+  .add-tile .ic{font-size:30px;display:block;margin-bottom:8px;}
+  .add-tile .t{font-weight:700;font-size:14.5px;}
+  .add-tile.newline{background:var(--grad-new);}
+  .add-tile.offline{background:var(--grad-off);}
+  .add-tile.house{background:var(--grad-house);}
+  .add-tile.onu{background:var(--grad-onu);}
+  .add-tile .tile-paste{
+    background:rgba(0,0,0,0.18);
+    border:none;color:#fff;width:100%;padding:9px;font-size:12px;cursor:pointer;
+    font-weight:600;
+  }
+  .add-tile .tile-paste:active{background:rgba(0,0,0,0.3);}
+
+  .bulk-tile{
+    margin-top:12px;border-radius:16px;background:var(--card);border:1.5px dashed var(--line-bright);
+    padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;
+  }
+  .bulk-tile .ic{font-size:26px;flex-shrink:0;}
+  .bulk-tile .t{font-weight:700;font-size:14px;}
+  .bulk-tile .sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+  /* records tab */
+  .searchbox{display:flex;gap:8px;margin-bottom:10px;}
+  .searchbox input{
+    flex:1;padding:13px 15px;font-size:15.5px;border:2px solid var(--ink);border-radius:10px;background:#fff;
+  }
+  .searchbox input:focus{outline:none;border-color:var(--line-bright);}
+  .filter-chips{display:flex;gap:7px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px;}
+  .filter-chip{
+    flex-shrink:0;padding:8px 14px;border-radius:20px;border:1.5px solid var(--border);
+    background:#fff;font-size:12.5px;cursor:pointer;white-space:nowrap;
+  }
+  .filter-chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .count-line{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin:0 0 10px 2px;}
+
+  .card{background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:11px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,32,0.04);}
+  .card-head{padding:13px 15px 9px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer;}
+  .type-tag{
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:#fff;
+    padding:2px 7px;border-radius:5px;margin-right:7px;display:inline-block;vertical-align:middle;
+  }
+  .type-tag.newline{background:var(--line-bright);}
+  .type-tag.offline{background:var(--danger);}
+  .type-tag.housechange{background:var(--amber);}
+  .type-tag.onuchange{background:var(--blue);}
+  .card-name{font-weight:700;font-size:15.5px;}
+  .card-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:3px;}
+  .chevron{font-size:18px;color:var(--line-bright);transition:transform .15s ease;flex-shrink:0;margin-top:2px;}
+  .chevron.open{transform:rotate(90deg);}
+  .card-body{display:none;padding:2px 15px 15px;border-top:1px dashed var(--border);}
+  .card-body.open{display:block;}
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px 14px;margin-top:11px;}
+  .field{font-size:13.5px;}
+  .field .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--line-bright);display:block;margin-bottom:2px;}
+  .field .val{word-break:break-word;}
+  .field.full{grid-column:1/-1;}
+  .card-actions{display:flex;gap:8px;margin-top:14px;}
+  .card-actions button{flex:1;padding:10px;border-radius:8px;border:1px solid var(--ink);background:transparent;font-size:13px;font-weight:600;cursor:pointer;}
+  .card-actions .del{border-color:var(--danger);color:var(--danger);}
+  .empty{text-align:center;padding:50px 20px;color:var(--muted);}
+  .empty .big{font-size:36px;margin-bottom:10px;}
+
+  /* modal */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(16,24,32,0.55);z-index:100;align-items:flex-end;justify-content:center;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--paper);width:100%;max-width:860px;max-height:92vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:18px 16px 90px;position:relative;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:sticky;top:-18px;background:var(--paper);padding:18px 0 10px;z-index:2;}
+  .modal-head h2{margin:0;font-size:17px;}
+  .modal-close{background:none;border:none;font-size:22px;color:var(--ink);cursor:pointer;line-height:1;padding:4px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .form-grid label{display:block;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--line-bright);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;}
+  .form-grid .fw{grid-column:1/-1;}
+  .form-grid input,.form-grid select{width:100%;padding:11px 10px;border:1.5px solid #c7d0cd;border-radius:8px;font-size:14.5px;background:#fff;}
+  .form-grid input:focus,.form-grid select:focus{outline:none;border-color:var(--line-bright);}
+  .section-tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin:16px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px;grid-column:1/-1;}
+  .modal-save{position:fixed;bottom:0;left:0;right:0;max-width:860px;margin:0 auto;background:var(--ink);color:#fff;border:none;padding:16px;font-size:15.5px;font-weight:700;cursor:pointer;z-index:110;}
+  #pasteArea{width:100%;min-height:220px;padding:12px;border:1.5px solid #c7d0cd;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;resize:vertical;background:#fff;}
+  .paste-hint{font-size:12.5px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+
+  .bulk-item{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:12px 13px;margin-bottom:9px;}
+  .bulk-item.unmatched{border-color:var(--danger);background:#fff5f4;}
+  .bulk-item .bi-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .bulk-item .bi-name{font-weight:700;font-size:14.5px;}
+  .bulk-item .bi-meta{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .bulk-item .bi-remove{background:none;border:none;color:var(--danger);font-size:18px;cursor:pointer;line-height:1;padding:2px 4px;flex-shrink:0;}
+  .bulk-item select{width:100%;margin-top:9px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13.5px;background:#fff;}
+  .bulk-item.unmatched select{border-color:var(--danger);}
+  .bulk-item .bi-warn{font-size:11px;color:var(--danger);margin-top:5px;font-weight:600;}
+
+  .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:20px;font-size:13.5px;z-index:200;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="logo-mark">KS</div>
+    <h1>KS Network Limited</h1>
+    <div class="tagline">LINE MANAGEMENT SYSTEM</div>
+    <input type="text" id="loginUser" placeholder="User name" autocomplete="username">
+    <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+    <button onclick="attemptLogin()">লগইন করুন</button>
+    <div class="login-note">এটি একটি সাধারণ লগইন স্ক্রিন — পেজ রিলোড করলে আবার লগইন করতে হবে। এটি ব্যাংকিং-লেভেল সিকিউরিটি নয়, শুধু অনাকাঙ্ক্ষিত অ্যাক্সেস আটকানোর জন্য।</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" style="display:none;">
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">KS</div>
+      <div>
+        <h1>KS Network Limited</h1>
+        <div class="sub" id="topbarSub">লাইন ম্যানেজমেন্ট সিস্টেম</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- HOME -->
+    <div class="tabcontent active" id="tab-home">
+      <div class="month-select-row">
+        <select id="monthSelect" onchange="onMonthChange()"></select>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card newline">
+          <div class="ic-badge">🔌</div>
+          <div class="num" id="cntNewLine">0</div>
+          <div class="lbl">নতুন লাইন</div>
+        </div>
+        <div class="stat-card off">
+          <div class="ic-badge">⛔</div>
+          <div class="num" id="cntOffLine">0</div>
+          <div class="lbl">অফ লাইন</div>
+        </div>
+        <div class="stat-card house">
+          <div class="ic-badge">🏠</div>
+          <div class="num" id="cntHouseChange">0</div>
+          <div class="lbl">হাউস চেঞ্জ</div>
+        </div>
+        <div class="stat-card onu">
+          <div class="ic-badge">📡</div>
+          <div class="num" id="cntOnuChange">0</div>
+          <div class="lbl">ONU চেঞ্জ</div>
+        </div>
+      </div>
+      <div class="section-label">ব্রাঞ্চ অনুযায়ী বিবরণ (এই মাস)</div>
+      <div id="branchBreakdown"></div>
+    </div>
+
+    <!-- BRANCH -->
+    <div class="tabcontent" id="tab-branch">
+      <div class="branch-add-row">
+        <input type="text" id="newBranchInput" placeholder="নতুন ব্রাঞ্চের নাম লিখুন">
+        <button onclick="addBranch()">যোগ করুন</button>
+      </div>
+      <div class="searchbox">
+        <input type="text" id="branchSearchInput" placeholder="ব্রাঞ্চ খুঁজুন..." oninput="renderBranchList()">
+      </div>
+      <div class="count-line" id="branchCountLine"></div>
+      <div id="branchList"></div>
+    </div>
+
+    <!-- RECORDS -->
+    <div class="tabcontent" id="tab-records">
+      <div class="searchbox">
+        <input type="text" id="searchInput" placeholder="নাম, নাম্বার, ইউজারনেম, ঠিকানা বা NID দিয়ে খুঁজুন..." oninput="renderRecords()">
+      </div>
+      <div class="filter-chips" id="filterChips"></div>
+      <div class="count-line" id="recordsCountLine"></div>
+      <div id="recordsList"></div>
+    </div>
+
+    <!-- ADD -->
+    <div class="tabcontent" id="tab-add">
+      <div class="add-grid">
+        <div class="add-tile newline">
+          <div class="tile-main" onclick="openEntryModal(null,'newline')">
+            <span class="ic">🔌</span><span class="t">New Line</span>
+          </div>
+          <button class="tile-paste" onclick="event.stopPropagation(); openPasteModal('newline')">📋 পেস্ট করে যোগ করুন</button>
+        </div>
+        <div class="add-tile offline">
+          <div class="tile-main" onclick="openEntryModal(null,'offline')">
+            <span class="ic">⛔</span><span class="t">Off Line</span>
+          </div>
+          <button class="tile-paste" onclick="event.stopPropagation(); openPasteModal('offline')">📋 পেস্ট করে যোগ করুন</button>
+        </div>
+        <div class="add-tile house">
+          <div class="tile-main" onclick="openEntryModal(null,'housechange')">
+            <span class="ic">🏠</span><span class="t">House Change</span>
+          </div>
+          <button class="tile-paste" onclick="event.stopPropagation(); openPasteModal('housechange')">📋 পেস্ট করে যোগ করুন</button>
+        </div>
+        <div class="add-tile onu">
+          <div class="tile-main" onclick="openEntryModal(null,'onuchange')">
+            <span class="ic">📡</span><span class="t">Onu Change</span>
+          </div>
+          <button class="tile-paste" onclick="event.stopPropagation(); openPasteModal('onuchange')">📋 পেস্ট করে যোগ করুন</button>
+        </div>
+      </div>
+
+      <div class="bulk-tile" onclick="openBulkModal()">
+        <span class="ic">🔁</span>
+        <div>
+          <div class="t">গ্রুপ থেকে একসাথে অনেক New Line পেস্ট করুন</div>
+          <div class="sub">একবারে ৫০-৬০টা মেসেজ পেস্ট করলে থানা দেখে অটো ব্রাঞ্চ বসিয়ে দেবে</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottomnav" id="bottomNav">
+    <button data-tab="home" onclick="showTab('home')"><span class="ic">🏠</span>হোম</button>
+    <button data-tab="branch" onclick="showTab('branch')"><span class="ic">🗂️</span>ব্রাঞ্চ</button>
+    <button data-tab="records" onclick="showTab('records')"><span class="ic">📄</span>রেকর্ড</button>
+    <button data-tab="add" onclick="showTab('add')"><span class="ic">➕</span>যোগ করুন</button>
+  </div>
+</div>
+
+<!-- ENTRY MODAL -->
+<div class="overlay" id="entryOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="entryModalTitle">নতুন এন্ট্রি</h2>
+      <button class="modal-close" onclick="closeEntryModal()">✕</button>
+    </div>
+    <div class="form-grid" id="entryFormGrid"></div>
+  </div>
+</div>
+<button class="modal-save" id="entrySaveBtn" style="display:none;" onclick="saveEntryModal()">সংরক্ষণ করুন (Save)</button>
+
+<!-- PASTE MODAL -->
+<div class="overlay" id="pasteOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="pasteModalTitle">পেস্ট করে যোগ করুন</h2>
+      <button class="modal-close" onclick="closePasteModal()">✕</button>
+    </div>
+    <div class="paste-hint" id="pasteHint">যে ফরম্যাটে প্রতি মাসে মেসেজ লেখেন, ঠিক সেভাবেই পুরো টেক্সটটা নিচে পেস্ট করুন — বাকিটা নিজে থেকেই ফিল্ডে বসে যাবে। এরপর ব্রাঞ্চ বেছে নিয়ে Save করুন।</div>
+    <textarea id="pasteArea" placeholder="Id:...&#10;Mobile Number:...&#10;..."></textarea>
+  </div>
+</div>
+<button class="modal-save" id="parseBtn" style="display:none;" onclick="parseAndReview()">পার্স করে দেখুন (Parse)</button>
+
+<!-- BULK IMPORT MODAL -->
+<div class="overlay" id="bulkOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="bulkModalTitle">গ্রুপ থেকে বাল্ক পেস্ট — New Line</h2>
+      <button class="modal-close" onclick="closeBulkModal()">✕</button>
+    </div>
+    <div id="bulkStagePaste">
+      <div class="paste-hint">গ্রুপ থেকে যতগুলো মেসেজ কপি করেছেন সবগুলো একসাথে নিচে পেস্ট করুন। প্রতিটা নতুন মেসেজ "Name" লাইন দিয়ে শুরু হয় ধরে নিয়ে আলাদা করা হবে, এবং প্রতিটার থানা দেখে ব্রাঞ্চ অটো বসবে।</div>
+      <textarea id="bulkPasteArea" style="min-height:280px;" placeholder="Name:...&#10;Mobile Number:...&#10;Thana:...&#10;...&#10;&#10;Name:...&#10;..."></textarea>
+    </div>
+    <div id="bulkStageReview" style="display:none;">
+      <div class="paste-hint" id="bulkReviewSummary"></div>
+      <div id="bulkReviewList"></div>
+    </div>
+  </div>
+</div>
+<button class="modal-save" id="bulkParseBtn" style="display:none;" onclick="parseBulkText()">পার্স করুন (Parse)</button>
+<button class="modal-save" id="bulkSaveBtn" style="display:none;" onclick="saveBulkEntries()">সব সেভ করুন (Save All)</button>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ---------------- CONFIG ---------------- */
+const LOGIN_USER = 'asif123';
+const LOGIN_PASS = 'asif123';
+const STORAGE_KEY = 'ksnetwork-appdata';
+const SUPABASE_URL = 'https://quzikrjnmwbkotzpylff.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1emlrcmpubXdia290enB5bGZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMzMzMTksImV4cCI6MjEwMTYwOTMxOX0.m2iJF6stqOI3WEqE1QzAC1osy4LA6uTJOdfVZxmb4FQ';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const DEFAULT_BRANCHES = [
+  'আজিমপুর','নীলক্ষেত','কামরাঙ্গীচর','ডেমরা','এলিফেন্ট রোড','ধানমন্ডি','ইস্কাটন','মোহাম্মদপুর',
+  'মিরপুর','মানিক দি','বসুন্ধরা','উত্তরা','বনানী','বাড্ডা','ফেনী','ছাগলনাইয়া','দাগনভূইয়া',
+  'ফুলগাজী','পশুরাম','সোনাগাজী','ময়মনসিংহ','কুমিল্লা','চট্টগ্রাম','কক্সবাজার','বরিশাল','বগুড়া',
+  'গাইবান্ধা','যশোর','খুলনা','রাজশাহী','সিলেট','লক্ষিপুর','নোয়াখালী'
+];
+
+const BANGLA_MONTHS = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+
+const FULL_FIELDS = [
+  {key:'billingName', label:'Billing Name', section:'গ্রাহক তথ্য', aliases:['billingname','name','customername']},
+  {key:'username', label:'User Name / Password', aliases:['username','usernamepassword','userid']},
+  {key:'customerType', label:'Group / Customer Type', aliases:['groupcustomertype','customertype','group']},
+  {key:'mobile', label:'Mobile Number', aliases:['mobilenumber','mobile','mobileno','phone']},
+  {key:'nid', label:'NID / Passport', aliases:['nidpassport','nid','passport']},
+  {key:'areaCode', label:'Area Code', aliases:['areacode']},
+  {key:'address', label:'Address', full:true, aliases:['address']},
+  {key:'district', label:'District', aliases:['district']},
+  {key:'thana', label:'Thana', aliases:['thana']},
+  {key:'package', label:'Package', section:'প্যাকেজ ও বিলিং', aliases:['package']},
+  {key:'form', label:'Form No', aliases:['form','formno']},
+  {key:'serviceCharge', label:'Service Charge / OTC', aliases:['servicechargeotc','servicecharge','otc']},
+  {key:'moneyReceipt', label:'Money Receipt No', aliases:['moneyreceiptno','moneyreceipt']},
+  {key:'totalReceived', label:'Total Received', aliases:['totalreceived','totalrecieved']},
+  {key:'popName', label:'POP Name', aliases:['popname','pop']},
+  {key:'rtr', label:'RTR', aliases:['rtr']},
+  {key:'cableMeter', label:'Cable Meter', section:'ডিভাইস তথ্য', aliases:['cablemeter']},
+  {key:'fiberCode', label:'Fiber Code', aliases:['fivarcode','fibercode','fiber','fivar']},
+  {key:'device', label:'Device', aliases:['device']},
+  {key:'deviceMac', label:'Device MAC', aliases:['devicemac','mac']},
+  {key:'deviceSn', label:'Device SN', aliases:['devicesn','sn','serial']},
+];
+
+const HOUSE_FIELDS = [
+  {key:'refId', label:'ID', aliases:['id']},
+  {key:'newAddress', label:'New Address', aliases:['newaddress']},
+  {key:'oldAddress', label:'Old Address', aliases:['oldaddress']},
+  {key:'fiberMeter', label:'Fiber Meter', aliases:['fivermitter','fibermeter','fivermeter','fiverMitter'.toLowerCase(),'fiber']},
+  {key:'mobile', label:'Phone Number', aliases:['phonenumber','phone','mobile','mobilenumber']},
+];
+
+const ONU_FIELDS = [
+  {key:'refId', label:'ID', aliases:['id']},
+  {key:'newOnuSn', label:'New ONU SN', aliases:['newonusn']},
+  {key:'newOnuMac', label:'New ONU MAC', aliases:['newonumac']},
+  {key:'oldOnuSn', label:'Old ONU SN', aliases:['oldonusn']},
+  {key:'oldOnuMac', label:'Old ONU MAC', aliases:['oldonumac']},
+  {key:'note', label:'Change এর কারণ', full:true, aliases:['changerkaron','karon','reason']},
+  {key:'mobile', label:'Phone Number', aliases:['phonenumber','phone','mobile','mobilenumber']},
+];
+
+const OFFLINE_FIELDS = [
+  {key:'refId', label:'ID', aliases:['id']},
+  {key:'offDays', label:'কত দিন অফ থাকবে', aliases:['kotodinoffthakbe','offdays','days']},
+  {key:'note', label:'কী কারণে অফ হবে', full:true, aliases:['kekaroneoffhobe','karon','reason']},
+  {key:'mobile', label:'Phone Number', aliases:['phonenumber','phone','mobile','mobilenumber']},
+];
+
+const FIELDS_BY_TYPE = {
+  newline: FULL_FIELDS,
+  housechange: HOUSE_FIELDS,
+  onuchange: ONU_FIELDS,
+  offline: OFFLINE_FIELDS,
+};
+
+const TYPE_LABELS = {
+  newline:'New Line', offline:'Off Line', housechange:'House Change', onuchange:'Onu Change'
+};
+
+/* ---------------- STATE ---------------- */
+let appData = {branches: [...DEFAULT_BRANCHES], entries: [], branchThanas: {}};
+let selectedMonth = null;
+let openCardId = null;
+let entryModalType = null;
+let entryEditingId = null;
+let recordsFilterType = 'all';
+let bulkParsedEntries = [];
+
+/* ---------------- LOGIN ---------------- */
+function attemptLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  if(u === LOGIN_USER && p === LOGIN_PASS){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+    loadAppData();
+  } else {
+    toast('ভুল ইউজারনেম বা পাসওয়ার্ড');
+  }
+}
+
+/* ---------------- TOAST ---------------- */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1700);
+}
+
+/* ---------------- DATA LOAD/SAVE (Supabase) ---------------- */
+async function loadAppData(){
+  try{
+    const {data, error} = await supabaseClient
+      .from('app_data')
+      .select('data')
+      .eq('id', STORAGE_KEY)
+      .maybeSingle();
+    if(error) throw error;
+    if(data && data.data){
+      const parsed = data.data;
+      appData = {
+        branches: parsed.branches && parsed.branches.length ? parsed.branches : [...DEFAULT_BRANCHES],
+        entries: parsed.entries || [],
+        branchThanas: parsed.branchThanas || {}
+      };
+    } else {
+      appData = {branches: [...DEFAULT_BRANCHES], entries: [], branchThanas: {}};
+      await persist();
+    }
+  }catch(e){
+    console.error(e);
+    toast('ডেটাবেস থেকে লোড করতে সমস্যা হয়েছে');
+    appData = {branches: [...DEFAULT_BRANCHES], entries: [], branchThanas: {}};
+  }
+  selectedMonth = currentMonthKey();
+  showTab('home');
+}
+
+async function persist(){
+  try{
+    const {error} = await supabaseClient
+      .from('app_data')
+      .upsert({id: STORAGE_KEY, data: appData});
+    if(error) throw error;
+  }catch(e){
+    console.error(e);
+    toast('সংরক্ষণে সমস্যা হয়েছে, আবার চেষ্টা করুন');
+  }
+}
+
+/* ---------------- HELPERS ---------------- */
+function todayIso(){ return new Date().toISOString().slice(0,10); }
+function currentMonthKey(){ return new Date().toISOString().slice(0,7); }
+function monthKeyOf(dateStr){ return (dateStr || todayIso()).slice(0,7); }
+function monthLabel(key){
+  const [y,m] = key.split('-');
+  return BANGLA_MONTHS[parseInt(m,10)-1] + ' ' + y;
+}
+function escapeHtml(str){
+  if(str === undefined || str === null) return '';
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+function normalizeLabel(s){ return s.toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+/* ---------------- TABS ---------------- */
+function showTab(name){
+  document.querySelectorAll('.tabcontent').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  if(name === 'home') renderHome();
+  if(name === 'branch') renderBranchList();
+  if(name === 'records') renderRecords();
+}
+
+/* ---------------- HOME ---------------- */
+function renderHome(){
+  const monthsSet = new Set(appData.entries.map(e => monthKeyOf(e.date)));
+  monthsSet.add(currentMonthKey());
+  const months = Array.from(monthsSet).sort().reverse();
+  const sel = document.getElementById('monthSelect');
+  sel.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonth?'selected':''}>${monthLabel(m)}</option>`).join('');
+
+  const inMonth = appData.entries.filter(e => monthKeyOf(e.date) === selectedMonth);
+  const counts = {newline:0, offline:0, housechange:0, onuchange:0};
+  inMonth.forEach(e => { if(counts[e.type] !== undefined) counts[e.type]++; });
+
+  document.getElementById('cntNewLine').textContent = counts.newline;
+  document.getElementById('cntOffLine').textContent = counts.offline;
+  document.getElementById('cntHouseChange').textContent = counts.housechange;
+  document.getElementById('cntOnuChange').textContent = counts.onuchange;
+
+  const byBranch = {};
+  inMonth.forEach(e => {
+    const b = e.branch || '(ব্রাঞ্চ নেই)';
+    if(!byBranch[b]) byBranch[b] = {newline:0, offline:0, housechange:0, onuchange:0};
+    byBranch[b][e.type]++;
+  });
+  const rows = Object.keys(byBranch).sort((a,b)=>{
+    const totalA = Object.values(byBranch[a]).reduce((s,n)=>s+n,0);
+    const totalB = Object.values(byBranch[b]).reduce((s,n)=>s+n,0);
+    return totalB - totalA;
+  });
+
+  const bbDiv = document.getElementById('branchBreakdown');
+  if(rows.length === 0){
+    bbDiv.innerHTML = `<div class="empty"><div class="big">📊</div>এই মাসে এখনো কোনো এন্ট্রি নেই।</div>`;
+    return;
+  }
+  bbDiv.innerHTML = `
+    <table class="breakdown">
+      <thead><tr><th>ব্রাঞ্চ</th><th>New</th><th>Off</th><th>House</th><th>Onu</th><th>মোট</th></tr></thead>
+      <tbody>
+        ${rows.map(b => {
+          const c = byBranch[b];
+          const total = c.newline + c.offline + c.housechange + c.onuchange;
+          return `<tr>
+            <td>${escapeHtml(b)}</td>
+            <td class="num">${c.newline}</td>
+            <td class="num">${c.offline}</td>
+            <td class="num">${c.housechange}</td>
+            <td class="num">${c.onuchange}</td>
+            <td class="num"><strong>${total}</strong></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function onMonthChange(){
+  selectedMonth = document.getElementById('monthSelect').value;
+  renderHome();
+}
+
+/* ---------------- BRANCH TAB ---------------- */
+let openBranchName = null;
+
+function renderBranchList(){
+  const q = (document.getElementById('branchSearchInput').value || '').trim().toLowerCase();
+  const counts = {};
+  appData.branches.forEach(b => { counts[b] = {newline:0, offline:0, housechange:0, onuchange:0}; });
+  appData.entries.forEach(e => {
+    if(!counts[e.branch]) counts[e.branch] = {newline:0, offline:0, housechange:0, onuchange:0};
+    if(counts[e.branch][e.type] !== undefined) counts[e.branch][e.type]++;
+  });
+
+  const names = appData.branches.filter(b => !q || b.toLowerCase().includes(q));
+  document.getElementById('branchCountLine').textContent = `মোট ব্রাঞ্চ: ${appData.branches.length}`;
+
+  const list = document.getElementById('branchList');
+  if(names.length === 0){
+    list.innerHTML = `<div class="empty"><div class="big">🗂️</div>কোনো ব্রাঞ্চ পাওয়া যায়নি।</div>`;
+    return;
+  }
+
+  list.innerHTML = names.map(b => {
+    const c = counts[b] || {newline:0, offline:0, housechange:0, onuchange:0};
+    const total = c.newline + c.offline + c.housechange + c.onuchange;
+    const isOpen = openBranchName === b;
+    return `
+    <div class="branch-card">
+      <div class="branch-card-head" onclick="toggleBranchCard('${b.replace(/'/g,"\\'")}')">
+        <div>
+          <div class="bname">${escapeHtml(b)}</div>
+          <div class="bcount">মোট এন্ট্রি: ${total}${(appData.branchThanas[b]&&appData.branchThanas[b].length) ? ' · থানা: '+escapeHtml(appData.branchThanas[b].join(', ')) : ''}</div>
+        </div>
+        <div class="chevron ${isOpen?'open':''}">›</div>
+      </div>
+      <div class="branch-card-body ${isOpen?'open':''}">
+        <div class="branch-stat-row">
+          <div class="branch-stat-mini"><div class="n">${c.newline}</div><div class="l">New</div></div>
+          <div class="branch-stat-mini"><div class="n">${c.offline}</div><div class="l">Off</div></div>
+          <div class="branch-stat-mini"><div class="n">${c.housechange}</div><div class="l">House</div></div>
+          <div class="branch-stat-mini"><div class="n">${c.onuchange}</div><div class="l">Onu</div></div>
+        </div>
+        <div class="thana-edit-row">
+          <label>এই ব্রাঞ্চের থানা (কমা দিয়ে একাধিক লিখুন)</label>
+          <div class="thana-edit-inline">
+            <input type="text" id="thana_${b.replace(/[^a-zA-Z0-9]/g,'_')}" value="${escapeHtml((appData.branchThanas[b]||[]).join(', '))}" placeholder="যেমন: লালবাগ, আজিমপুর">
+            <button onclick="event.stopPropagation(); saveBranchThanas('${b.replace(/'/g,"\\'")}')">সেভ</button>
+          </div>
+        </div>
+        <div class="branch-actions">
+          <button onclick="event.stopPropagation(); renameBranch('${b.replace(/'/g,"\\'")}')">✏️ রিনেম</button>
+          <button class="del" onclick="event.stopPropagation(); deleteBranch('${b.replace(/'/g,"\\'")}')">🗑️ ডিলিট</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleBranchCard(name){
+  openBranchName = openBranchName === name ? null : name;
+  renderBranchList();
+}
+
+async function addBranch(){
+  const input = document.getElementById('newBranchInput');
+  const name = input.value.trim();
+  if(!name){ toast('ব্রাঞ্চের নাম লিখুন'); return; }
+  if(appData.branches.includes(name)){ toast('এই ব্রাঞ্চ আগে থেকেই আছে'); return; }
+  appData.branches.push(name);
+  await persist();
+  input.value = '';
+  renderBranchList();
+  toast('ব্রাঞ্চ যোগ হয়েছে');
+}
+
+async function renameBranch(oldName){
+  const newName = prompt('নতুন ব্রাঞ্চের নাম লিখুন:', oldName);
+  if(!newName) return;
+  const nn = newName.trim();
+  if(!nn || nn === oldName) return;
+  if(appData.branches.includes(nn)){ toast('এই নামে ব্রাঞ্চ আগে থেকেই আছে'); return; }
+  appData.branches = appData.branches.map(b => b === oldName ? nn : b);
+  appData.entries.forEach(e => { if(e.branch === oldName) e.branch = nn; });
+  if(appData.branchThanas[oldName]){ appData.branchThanas[nn] = appData.branchThanas[oldName]; delete appData.branchThanas[oldName]; }
+  if(openBranchName === oldName) openBranchName = nn;
+  await persist();
+  renderBranchList();
+  toast('ব্রাঞ্চের নাম পরিবর্তন হয়েছে');
+}
+
+function normalizeThana(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,' '); }
+
+async function saveBranchThanas(name){
+  const input = document.getElementById('thana_'+name.replace(/[^a-zA-Z0-9]/g,'_'));
+  const list = input.value.split(',').map(s => s.trim()).filter(Boolean);
+  appData.branchThanas[name] = list;
+  await persist();
+  toast('থানা তালিকা সংরক্ষণ হয়েছে');
+  renderBranchList();
+}
+
+function findBranchByThana(thanaValue){
+  const norm = normalizeThana(thanaValue);
+  if(!norm) return '';
+  for(const b of appData.branches){
+    const list = appData.branchThanas[b] || [];
+    if(list.some(t => normalizeThana(t) === norm)) return b;
+  }
+  return '';
+}
+
+async function deleteBranch(name){
+  if(!confirm(`"${name}" ব্রাঞ্চটি লিস্ট থেকে মুছে ফেলতে চান?\n(আগের এন্ট্রিগুলো ঠিক থাকবে, শুধু নতুন এন্ট্রিতে এই নামটি আর দেখাবে না।)`)) return;
+  appData.branches = appData.branches.filter(b => b !== name);
+  delete appData.branchThanas[name];
+  await persist();
+  renderBranchList();
+}
+
+/* ---------------- RECORDS TAB ---------------- */
+function renderFilterChips(){
+  const types = [['all','সব'],['newline','New Line'],['offline','Off Line'],['housechange','House Change'],['onuchange','Onu Change']];
+  document.getElementById('filterChips').innerHTML = types.map(([key,label]) => `
+    <div class="filter-chip ${recordsFilterType===key?'active':''}" onclick="setRecordsFilter('${key}')">${label}</div>
+  `).join('');
+}
+function setRecordsFilter(key){ recordsFilterType = key; renderRecords(); }
+
+function matchesSearch(e, q){
+  if(!q) return true;
+  q = q.trim().toLowerCase();
+  const searchable = Object.keys(e)
+    .filter(k => typeof e[k] === 'string')
+    .map(k => e[k])
+    .join(' ').toLowerCase();
+  return searchable.includes(q);
+}
+
+function getEntryTitle(e){
+  if(e.type === 'newline') return e.billingName || '(নাম নেই)';
+  return e.refId ? ('ID: ' + e.refId) : TYPE_LABELS[e.type];
+}
+
+function renderRecords(){
+  renderFilterChips();
+  const q = document.getElementById('searchInput').value;
+  let filtered = appData.entries.filter(e => matchesSearch(e, q));
+  if(recordsFilterType !== 'all') filtered = filtered.filter(e => e.type === recordsFilterType);
+  filtered.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+  document.getElementById('recordsCountLine').textContent = `${filtered.length} টি এন্ট্রি`;
+  const area = document.getElementById('recordsList');
+
+  if(filtered.length === 0){
+    area.innerHTML = `<div class="empty"><div class="big">${appData.entries.length===0?'📋':'🔍'}</div>${appData.entries.length===0?'এখনো কোনো এন্ট্রি নেই।':'কোনো মিল পাওয়া যায়নি।'}</div>`;
+    return;
+  }
+
+  area.innerHTML = filtered.map(e => {
+    const isOpen = openCardId === e.id;
+    const fields = FIELDS_BY_TYPE[e.type] || [];
+    return `
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('${e.id}')">
+        <div>
+          <div class="card-name"><span class="type-tag ${e.type}">${TYPE_LABELS[e.type]}</span>${escapeHtml(getEntryTitle(e))}</div>
+          <div class="card-meta">${escapeHtml(e.branch)||''}${e.mobile ? ' · '+escapeHtml(e.mobile) : ''} · ${e.date||''}</div>
+        </div>
+        <div class="chevron ${isOpen?'open':''}">›</div>
+      </div>
+      <div class="card-body ${isOpen?'open':''}">
+        <div class="field-grid">
+          <div class="field"><span class="label">Branch</span><span class="val">${escapeHtml(e.branch)||'—'}</span></div>
+          <div class="field"><span class="label">Date</span><span class="val">${escapeHtml(e.date)||'—'}</span></div>
+          ${fields.map(f => `
+            <div class="field ${f.full?'full':''}">
+              <span class="label">${f.label}</span>
+              <span class="val">${escapeHtml(e[f.key]) || '—'}</span>
+            </div>`).join('')}
+        </div>
+        <div class="card-actions">
+          <button onclick="event.stopPropagation(); editEntry('${e.id}')">✏️ এডিট</button>
+          <button class="del" onclick="event.stopPropagation(); deleteEntryGlobal('${e.id}')">🗑️ ডিলিট</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id){
+  openCardId = openCardId === id ? null : id;
+  renderRecords();
+}
+
+async function deleteEntryGlobal(id){
+  if(!confirm('এই এন্ট্রিটি মুছে ফেলতে চান?')) return;
+  appData.entries = appData.entries.filter(e => e.id !== id);
+  await persist();
+  renderRecords();
+  toast('মুছে ফেলা হয়েছে');
+}
+
+function editEntry(id){
+  const entry = appData.entries.find(e => e.id === id);
+  if(entry) openEntryModal(entry, entry.type);
+}
+
+/* ---------------- ENTRY MODAL (add/edit, all 4 types) ---------------- */
+function branchOptionsHtml(selected){
+  return `<option value="">-- ব্রাঞ্চ বাছাই করুন --</option>` +
+    appData.branches.map(b => `<option value="${escapeHtml(b)}" ${b===selected?'selected':''}>${escapeHtml(b)}</option>`).join('');
+}
+
+function openEntryModal(entry, type){
+  entryModalType = type;
+  entryEditingId = (entry && entry.id) ? entry.id : null;
+  document.getElementById('entryModalTitle').textContent =
+    (entryEditingId ? 'এডিট করুন — ' : (entry ? 'যাচাই করে সংরক্ষণ করুন — ' : 'নতুন এন্ট্রি — ')) + TYPE_LABELS[type];
+
+  const fields = FIELDS_BY_TYPE[type] || [];
+  const grid = document.getElementById('entryFormGrid');
+  grid.innerHTML = `
+    <div>
+      <label>Branch</label>
+      <select id="in_branch">${branchOptionsHtml(entry ? entry.branch : '')}</select>
+    </div>
+    <div>
+      <label>Date</label>
+      <input type="date" id="in_date" value="${entry && entry.date ? entry.date : todayIso()}">
+    </div>
+    ${fields.map(f => `
+      ${f.section ? `<div class="section-tag">${f.section}</div>` : ''}
+      <div class="${f.full ? 'fw' : ''}">
+        <label>${f.label}</label>
+        <input type="text" id="in_${f.key}" value="${entry ? escapeHtml(entry[f.key]) : ''}">
+      </div>
+    `).join('')}
+  `;
+  document.getElementById('entryOverlay').classList.add('open');
+  document.getElementById('entrySaveBtn').style.display = 'block';
+}
+
+function closeEntryModal(){
+  document.getElementById('entryOverlay').classList.remove('open');
+  document.getElementById('entrySaveBtn').style.display = 'none';
+  entryModalType = null;
+  entryEditingId = null;
+}
+
+async function saveEntryModal(){
+  const branch = document.getElementById('in_branch').value;
+  const date = document.getElementById('in_date').value || todayIso();
+  if(!branch){ toast('ব্রাঞ্চ বাছাই করুন'); return; }
+
+  const fields = FIELDS_BY_TYPE[entryModalType] || [];
+  const data = {};
+  fields.forEach(f => { data[f.key] = document.getElementById('in_'+f.key).value.trim(); });
+
+  if(!data.billingName && !data.mobile && !data.refId){
+    toast('অন্তত ID বা মোবাইল নাম্বার দিন');
+    return;
+  }
+
+  if(entryEditingId){
+    const idx = appData.entries.findIndex(e => e.id === entryEditingId);
+    if(idx > -1){
+      appData.entries[idx] = {...appData.entries[idx], branch, date, ...data};
+    }
+  } else {
+    appData.entries.push({
+      id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      type: entryModalType,
+      branch, date,
+      createdAt: Date.now(),
+      ...data
+    });
+  }
+
+  await persist();
+  closeEntryModal();
+  renderHome();
+  renderRecords();
+  toast('সংরক্ষণ করা হয়েছে');
+}
+
+/* ---------------- PASTE PARSE (all types) ---------------- */
+let pasteModalType = 'newline';
+
+function parseRawText(text, fields){
+  const data = {};
+  text.split(/\r?\n/).forEach(line => {
+    if(!line.trim()) return;
+    const idx = line.indexOf(':');
+    if(idx === -1) return;
+    const rawLabel = line.slice(0, idx);
+    const rawValue = line.slice(idx+1).trim();
+    if(!rawValue) return;
+    const norm = normalizeLabel(rawLabel);
+    const field = fields.find(f => f.aliases && f.aliases.includes(norm));
+    if(field) data[field.key] = rawValue;
+  });
+  return data;
+}
+
+function openPasteModal(type){
+  pasteModalType = type;
+  document.getElementById('pasteModalTitle').textContent = 'পেস্ট করে যোগ করুন — ' + TYPE_LABELS[type];
+  document.getElementById('pasteArea').value = '';
+  document.getElementById('pasteOverlay').classList.add('open');
+  document.getElementById('parseBtn').style.display = 'block';
+}
+function closePasteModal(){
+  document.getElementById('pasteOverlay').classList.remove('open');
+  document.getElementById('parseBtn').style.display = 'none';
+}
+function parseAndReview(){
+  const text = document.getElementById('pasteArea').value;
+  if(!text.trim()){ toast('আগে টেক্সট পেস্ট করুন'); return; }
+  const fields = FIELDS_BY_TYPE[pasteModalType] || [];
+  const data = parseRawText(text, fields);
+  if(Object.keys(data).length === 0){ toast('কোনো ফিল্ড মেলেনি, ফরম্যাট চেক করুন'); return; }
+  closePasteModal();
+  openEntryModal(data, pasteModalType);
+  toast('পার্স হয়েছে — ব্রাঞ্চ বেছে নিয়ে Save চাপুন');
+}
+
+/* ---------------- BULK IMPORT (many New Line messages at once, split by Name, branch by Thana) ---------------- */
+function openBulkModal(){
+  bulkParsedEntries = [];
+  document.getElementById('bulkPasteArea').value = '';
+  document.getElementById('bulkStagePaste').style.display = 'block';
+  document.getElementById('bulkStageReview').style.display = 'none';
+  document.getElementById('bulkParseBtn').style.display = 'block';
+  document.getElementById('bulkSaveBtn').style.display = 'none';
+  document.getElementById('bulkOverlay').classList.add('open');
+}
+
+function closeBulkModal(){
+  document.getElementById('bulkOverlay').classList.remove('open');
+  document.getElementById('bulkParseBtn').style.display = 'none';
+  document.getElementById('bulkSaveBtn').style.display = 'none';
+  bulkParsedEntries = [];
+}
+
+function parseBulkText(){
+  const text = document.getElementById('bulkPasteArea').value;
+  if(!text.trim()){ toast('আগে টেক্সট পেস্ট করুন'); return; }
+
+  const fields = FULL_FIELDS;
+  const startField = fields.find(f => f.key === 'billingName');
+  const lines = text.split(/\r?\n/);
+  const blocks = [];
+  let current = null;
+
+  lines.forEach(line => {
+    if(!line.trim()) return;
+    const idx = line.indexOf(':');
+    if(idx === -1) return;
+    const rawLabel = line.slice(0, idx);
+    const rawValue = line.slice(idx+1).trim();
+    const norm = normalizeLabel(rawLabel);
+
+    if(startField.aliases.includes(norm)){
+      current = {};
+      blocks.push(current);
+    }
+    if(!current || !rawValue) return;
+    const field = fields.find(f => f.aliases && f.aliases.includes(norm));
+    if(field) current[field.key] = rawValue;
+  });
+
+  if(blocks.length === 0){ toast('কোনো এন্ট্রি পাওয়া যায়নি — মেসেজে "Name:" লাইন আছে কিনা দেখুন'); return; }
+
+  bulkParsedEntries = blocks.map((data, i) => ({
+    tempId: 'b_' + i + '_' + Date.now(),
+    data,
+    branch: findBranchByThana(data.thana) || ''
+  }));
+
+  renderBulkReview();
+}
+
+function renderBulkReview(){
+  document.getElementById('bulkStagePaste').style.display = 'none';
+  document.getElementById('bulkStageReview').style.display = 'block';
+  document.getElementById('bulkParseBtn').style.display = 'none';
+  document.getElementById('bulkSaveBtn').style.display = bulkParsedEntries.length ? 'block' : 'none';
+
+  const matchedCount = bulkParsedEntries.filter(e => e.branch).length;
+  document.getElementById('bulkReviewSummary').textContent =
+    `মোট ${bulkParsedEntries.length} টি এন্ট্রি পাওয়া গেছে — ${matchedCount} টির ব্রাঞ্চ থানা দেখে অটো মিলেছে, ${bulkParsedEntries.length - matchedCount} টি ম্যানুয়ালি বেছে নিতে হবে।`;
+
+  const list = document.getElementById('bulkReviewList');
+  if(bulkParsedEntries.length === 0){
+    list.innerHTML = `<div class="empty"><div class="big">📋</div>সব এন্ট্রি বাদ দেওয়া হয়েছে।</div>`;
+    return;
+  }
+  list.innerHTML = bulkParsedEntries.map(item => {
+    const title = item.data.billingName || item.data.mobile || '(নাম নেই)';
+    return `
+    <div class="bulk-item ${item.branch ? '' : 'unmatched'}">
+      <div class="bi-head">
+        <div>
+          <div class="bi-name">${escapeHtml(title)}</div>
+          <div class="bi-meta">${item.data.thana ? 'থানা: '+escapeHtml(item.data.thana) : 'থানা লেখা নেই'}${item.data.mobile ? ' · '+escapeHtml(item.data.mobile) : ''}</div>
+        </div>
+        <button class="bi-remove" onclick="removeBulkEntry('${item.tempId}')" title="বাদ দিন">✕</button>
+      </div>
+      <select onchange="updateBulkEntryBranch('${item.tempId}', this.value)">
+        ${branchOptionsHtml(item.branch)}
+      </select>
+      ${!item.branch ? '<div class="bi-warn">⚠️ থানা মেলেনি — ব্রাঞ্চ বেছে নিন</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function updateBulkEntryBranch(tempId, branch){
+  const item = bulkParsedEntries.find(e => e.tempId === tempId);
+  if(item){ item.branch = branch; renderBulkReview(); }
+}
+
+function removeBulkEntry(tempId){
+  bulkParsedEntries = bulkParsedEntries.filter(e => e.tempId !== tempId);
+  renderBulkReview();
+}
+
+async function saveBulkEntries(){
+  const missing = bulkParsedEntries.filter(e => !e.branch);
+  if(missing.length > 0){ toast(`${missing.length} টি এন্ট্রির ব্রাঞ্চ বাছাই করা বাকি`); return; }
+  if(bulkParsedEntries.length === 0){ toast('সেভ করার মতো কোনো এন্ট্রি নেই'); return; }
+
+  const today = todayIso();
+  bulkParsedEntries.forEach(item => {
+    appData.entries.push({
+      id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      type: 'newline',
+      branch: item.branch,
+      date: today,
+      createdAt: Date.now(),
+      ...item.data
+    });
+  });
+
+  await persist();
+  toast(`${bulkParsedEntries.length} টি এন্ট্রি সংরক্ষণ হয়েছে`);
+  closeBulkModal();
+  renderHome();
+  renderRecords();
+}
+</script>
+</body>
+</html>
